@@ -11,39 +11,38 @@ public class PointPiece extends Piece {
     //by ashley ^o^
     @Override
     public boolean isValidMove(Board board, int newX, int newY) {
+        if (Math.abs(newY - this.getY()) > 2) //must be within 1-2 moves
+            return false;
+
+        if (board.getPiece(newX, newY) != null) {
+            if (board.getPiece(newX, newY).getColour() == this.getColour()) //must be a diff colour
+                return false;
+        }
+
         Piece pieceInFront;
 
         if (this.getDir() == "up") {
             for (int i = 1; i < Math.abs(newY - this.getY()); i++) {
                 pieceInFront = board.getPiece(this.getX(), this.getY() - i);
 
-                if (pieceInFront != null) {
+                if (pieceInFront != null)
                     return false;
-                }
-                continue;
-            }
 
-            if (newY == this.getY() - 1 || newY == this.getY() - 2) {
-                //valid
-                return true;
+                continue;
             }
         }
         else if (this.getDir() == "down") {
+
             for (int i = 1; i < Math.abs(newY - this.getY()); i++) {
                 pieceInFront = board.getPiece(this.getX(), this.getY() + i);
 
-                if (pieceInFront != null) {
+                if (pieceInFront != null)
                     return false;
-                }
+
                 continue;
             }
-            
-            if (newY == this.getY() + 1 ||
-                newY == this.getY() + 2) {
-                return true;
-            }
         }
-        return false;
+        return true;
     }
 
     @Override
