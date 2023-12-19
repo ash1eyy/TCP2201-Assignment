@@ -6,6 +6,10 @@ public class Board {
     private int dimY = 6;
     private ArrayList<ArrayList<Piece>> map;
 
+    public ArrayList<ArrayList<Piece>> getMap() {
+        return map;
+    }
+
     //by ashley ^_^
     //initializes the board
     public void init() {
