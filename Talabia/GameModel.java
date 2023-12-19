@@ -29,12 +29,17 @@ public class GameModel {
                 System.out.print("Enter y coordinate: ");
                 int pieceY = input.nextInt();
 
+                Piece pieceToMove = board.getPiece(pieceX, pieceY);
+
                 System.out.print("\nEnter x coordinate of destination: ");
                 int newX = input.nextInt();
                 System.out.print("Enter y coordinate of destination: ");
                 int newY = input.nextInt();
                 
-                board.getPiece(pieceX, pieceY).move(board, newX, newY);
+                pieceToMove.move(board, newX, newY);
+                pieceToMove.setX(newX);
+                pieceToMove.setY(newY);
+
                 break;
             
             case "save":
