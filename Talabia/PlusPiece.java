@@ -12,13 +12,27 @@ public class PlusPiece extends Piece {
     //by ashley :D
     @Override
     public boolean isValidMove(Board board, int newX, int newY) {
+        //checks the direction that the player wants to move the piece in
+        if (this.getX() == newX) { //either up or down
+            if (newY > this.getY()) // down
+                this.setDir("down");
+            else //up
+                this.setDir("up");
+        }
+        else { //either left or right
+            if (newX > this.getX()) //right
+                this.setDir("right");
+            else //left
+                this.setDir("left");
+        }
+
         Piece pieceInFront;
 
         //checks all of the spaces in the direction that the piece wants to move
         //if a piece is detected, move is invalid
         switch (this.getDir()) {
             case "left":
-                for (int i = 1; i < Math.abs(newX - this.getX()); i++) {
+                for (int i = 1; i < Math.abs(newX - this.getX()) + 1; i++) {
                     pieceInFront = board.getPiece(this.getX() - i, this.getY());
 
                     if (pieceInFront != null) {
@@ -29,7 +43,7 @@ public class PlusPiece extends Piece {
                 break;
 
             case "right":
-                for (int i = 1; i < Math.abs(newX - this.getX()); i++) {
+                for (int i = 1; i < Math.abs(newX - this.getX()) + 1; i++) {
                     pieceInFront = board.getPiece(this.getX() + i, this.getY());
 
                     if (pieceInFront != null) {
@@ -40,7 +54,7 @@ public class PlusPiece extends Piece {
                 break;
 
             case "up":
-                for (int i = 1; i < Math.abs(newY - this.getY()); i++) {
+                for (int i = 1; i < Math.abs(newY - this.getY()) + 1; i++) {
                     pieceInFront = board.getPiece(this.getX(), this.getY() - i);
 
                     if (pieceInFront != null) {
@@ -51,7 +65,7 @@ public class PlusPiece extends Piece {
                 break;
 
             case "down":
-                for (int i = 1; i < Math.abs(newY - this.getY()); i++) {
+                for (int i = 1; i < Math.abs(newY - this.getY()) + 1; i++) {
                     pieceInFront = board.getPiece(this.getX(), this.getY() + i);
 
                     if (pieceInFront != null) {
