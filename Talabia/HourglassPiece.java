@@ -7,20 +7,25 @@ public class HourglassPiece extends Piece {
         super(pieceX, pieceY, pieceColour, direction);
     }
 
+    //by zaf and aus >.<
     @Override
     public boolean isValidMove(Board board, int newX, int newY) {
-        // // Calculate the change in the x and y coordinates
-        // int deltaX = absolute(newX - getX());
-        // int deltaY = absolute(newY - getY());
+        if (board.getPiece(newX, newY) != null) {
+            if (board.getPiece(newX, newY).getColour() == this.getColour())         // must be a diff colour
+                return false;
+        }
+        
+        if (Math.abs(newY - this.getY()) == 2 && Math.abs(newX - this.getX()) == 1) // must be within the range of 3x2
+            return true;                                                            // Vertical 3x2
+        
+        if (Math.abs(newY - this.getY()) == 1 && Math.abs(newX - this.getX()) == 2) // must be within the range of 3x2
+            return true;                                                            // Horizontal 3x2
 
-        // // Check if the move is in an L shape (3x2)
-        // return (deltaX == 3 && deltaY == 2) || (deltaX == 2 && deltaY == 3);
-        return true;
+        return false;
     }
 
     @Override
     public String toString() {
         return "H";
     }
-}  
-
+}
