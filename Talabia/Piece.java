@@ -45,20 +45,23 @@ public abstract class Piece{
         this.direction = direction;
     }
 
-    public void move(Board board, int newX, int newY) {
+    //by ashley :-)
+    public boolean move(Board board, int newX, int newY) {
         if (isValidMove(board, newX, newY)) {
             board.setPiece(getX(), getY(), null);
             board.setPiece(newX, newY, this);
-            System.out.println("\nSuccessfully moved piece.");
+            System.out.println("\nSuccessfully moved piece.\n");
+            return true;
         }
         else {
-            System.out.println("\nNot a valid move.");
+            System.out.println("\nNot a valid move.\n");
+            return false;
         }
     };
 
     public abstract boolean isValidMove(Board board, int newX, int newY);
 
-    // this is a capture method that declares targetPiece variable from the pieces on the board 
+    // this is a capture method that declares targetPiece variable from the pieces on the board
     public void capture(Board board, int pieceX, int pieceY) { //zaf did this 
         Piece targetPiece = board.getPiece(pieceX, pieceY);   
         
