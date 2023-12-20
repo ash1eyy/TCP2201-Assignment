@@ -1,5 +1,3 @@
-import java.lang.*;
-
 public class PlusPiece extends Piece {
     PlusPiece() {
         super();
@@ -29,6 +27,7 @@ public class PlusPiece extends Piece {
         Piece pieceInFront;
 
         //checks all of the spaces in the direction that the piece wants to move
+        //EXCEPT for the destination space
         //if a piece is detected, move is invalid
         switch (this.getDir()) {
             case "left":
