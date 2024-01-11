@@ -20,6 +20,6 @@ public class GameController { //contol
     }
 
     public void setGameView(GameView view){
-
+        this.view = view;
     }
 }
