@@ -45,4 +45,9 @@ public class SunPiece extends Piece {
     public String toString() {
         return "S";
     }
+
+     @Override
+    public String getPiece() {
+        return "sun";
+    }
 }
