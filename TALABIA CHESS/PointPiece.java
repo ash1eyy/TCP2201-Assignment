@@ -37,7 +37,7 @@ public class PointPiece extends Piece {
             }
         } 
         else if (this.getDir() == "down") {
-            for (int i = 1; i < Math.abs(newY - this.getY()); i++) {
+            for (int i = 1; i < Math.abs(newY - this.getY()); i++) { //we use math abs so there is no negative numbers
                 pieceInFront = board.getPiece(this.getX(), this.getY() + i);
 
                 if (pieceInFront != null)
@@ -52,5 +52,10 @@ public class PointPiece extends Piece {
     @Override
     public String toString() {
         return "O";
+    }
+
+     @Override
+    public String getPiece() {
+        return "point";
     }
 }
