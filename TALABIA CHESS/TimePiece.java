@@ -40,7 +40,7 @@ public class TimePiece extends Piece {
         //if a piece is detected, move is invalid
         switch (this.getDir()) {
             case "upleft":
-                for (int i = 1; i < Math.abs(newX - this.getX()); i++) {
+                for (int i = 1; i < Math.abs(newX - this.getX()); i++) { //we use math abs so there is no negative numbers
                     pieceInFront = board.getPiece(this.getX() - i, this.getY() - i);
                     System.out.println(pieceInFront);
 
@@ -95,5 +95,10 @@ public class TimePiece extends Piece {
     @Override
     public String toString(){
         return "x";
+    }
+
+    @Override
+    public String getPiece() {
+        return "time";
     }
 }
