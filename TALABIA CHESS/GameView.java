@@ -14,8 +14,9 @@ public class GameView extends JFrame { // zaf and thash doing this, hello
 
         // default size for board
         setSize(800, 800);
+        
         setLayout(new BorderLayout());
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
 
         // make the window resizeable
         setResizable(true);
@@ -23,6 +24,8 @@ public class GameView extends JFrame { // zaf and thash doing this, hello
         addGameBoard(); // adds the gameboard into GUI
 
         addControlPanel();// adds the Control Into GUI
+        
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         setVisible(true);// make frame visible
     }
@@ -42,9 +45,10 @@ public class GameView extends JFrame { // zaf and thash doing this, hello
             for (int j = 0; j < controller.getGameModel().getX(); j++) {
 
                 Piece piece = map.get(i).get(j);
+                JButton newButton = new JButton();
 
             }
-        }
+        } 
     }
 
     public void addControlPanel() {
@@ -76,9 +80,11 @@ public class GameView extends JFrame { // zaf and thash doing this, hello
         controlPanel.add(exitButton);
         exitButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) {               
+                JOptionPane.showMessageDialog(exitButton, "Exiting...");
                 Game.exit();
             }
         });
     }
 }
+
