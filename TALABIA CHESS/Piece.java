@@ -46,6 +46,8 @@ public abstract class Piece {
         this.direction = direction;
     }
 
+    public abstract String getPiece();
+    
     // by ashley :-)
     public boolean move(Board board, int newX, int newY, String userColour) {
         if (isValidMove(board, newX, newY) && userColour == board.getPiece(getX(), getY()).getColour()) {
@@ -65,7 +67,6 @@ public abstract class Piece {
     // on the board
     public void capture(Board board, int pieceX, int pieceY) { // zaf did this
         Piece targetPiece = board.getPiece(pieceX, pieceY);
-
         if (this.pieceColour != targetPiece.getColour()) { // can capture
             board.setPiece(pieceX, pieceY, this); // "this" is the current piece that you are holding
             board.setPiece(this.getX(), this.getY(), null);
@@ -79,9 +80,11 @@ public abstract class Piece {
     public boolean check(Board board, int pieceX, int pieceY) {
 
         Piece pieceChecked = board.getPiece(pieceX, pieceY);
-        return true;
+
+        getSunPiece()
+        return false;
     } // checkmate method
 
-    
+
     //also update the move() method and have it check if there is a check 
 }
