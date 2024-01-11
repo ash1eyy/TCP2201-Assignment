@@ -1,12 +1,13 @@
-public abstract class Piece{
+public abstract class Piece {
     private int pieceX;
     private int pieceY;
     private String pieceColour;
     private String direction;
 
-    Piece() {}
+    Piece() {
+    }
 
-    Piece(int pieceX, int pieceY, String pieceColour, String direction) {  //zaf did this
+    Piece(int pieceX, int pieceY, String pieceColour, String direction) { // zaf did this
         this.pieceX = pieceX;
         this.pieceY = pieceY;
         this.pieceColour = pieceColour;
@@ -45,15 +46,14 @@ public abstract class Piece{
         this.direction = direction;
     }
 
-    //by ashley :-)
+    // by ashley :-)
     public boolean move(Board board, int newX, int newY, String userColour) {
         if (isValidMove(board, newX, newY) && userColour == board.getPiece(getX(), getY()).getColour()) {
             board.setPiece(getX(), getY(), null);
             board.setPiece(newX, newY, this);
             System.out.println("\nSuccessfully moved piece.\n");
             return true;
-        }
-        else {
+        } else {
             System.out.println("\nNot a valid move.\n");
             return false;
         }
@@ -61,18 +61,27 @@ public abstract class Piece{
 
     public abstract boolean isValidMove(Board board, int newX, int newY);
 
-    // this is a capture method that declares targetPiece variable from the pieces on the board
-    public void capture(Board board, int pieceX, int pieceY) { //zaf did this 
-        Piece targetPiece = board.getPiece(pieceX, pieceY);   
-        
-        if (this.pieceColour != targetPiece.getColour()) { //can capture
-            board.setPiece(pieceX, pieceY, this); //"this" is the current piece that you are holding
+    // this is a capture method that declares targetPiece variable from the pieces
+    // on the board
+    public void capture(Board board, int pieceX, int pieceY) { // zaf did this
+        Piece targetPiece = board.getPiece(pieceX, pieceY);
+
+        if (this.pieceColour != targetPiece.getColour()) { // can capture
+            board.setPiece(pieceX, pieceY, this); // "this" is the current piece that you are holding
             board.setPiece(this.getX(), this.getY(), null);
             System.out.println("You captured the piece!");
-        }
-        else { //cannot capture
-            //display error
-            System.out.println("You cannot capture your own piece"); //to replace with throw exception
+        } else { // cannot capture
+                 // display error
+            System.out.println("You cannot capture your own piece"); // to replace with throw exception
         }
     }
+
+    public boolean check(Board board, int pieceX, int pieceY) {
+
+        Piece pieceChecked = board.getPiece(pieceX, pieceY);
+        return true;
+    } // checkmate method
+
+    
+    //also update the move() method and have it check if there is a check 
 }
