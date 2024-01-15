@@ -6,9 +6,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-public class talabiaChessGUI extends JFrame {
+public class talabiaChessGUI extends JFrame { // by Javier Austin ^.^
     private static int column = 7;
     private static int row = 6;
 
@@ -50,7 +51,7 @@ public class talabiaChessGUI extends JFrame {
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO
+                // TODO add Start Game feature
             }
         });
 
@@ -59,7 +60,34 @@ public class talabiaChessGUI extends JFrame {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //TODO Save Game feature
                 // prompts the user to input a filename
+            }
+        });
+
+        JButton loadButton = new JButton("Load");
+        buttonPanel.add(loadButton);
+        loadButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // TODO add Load feature
+            }
+            
+        });
+
+        JButton helpButton = new JButton("Help");
+        buttonPanel.add(helpButton);
+        helpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String helpMessage = Game.helpCommands();
+
+                // Check if the helpMessage is not null before showing the dialog
+                if (helpMessage != null) {
+                    JOptionPane.showMessageDialog(buttonPanel, helpMessage);
+                } else {
+                    JOptionPane.showMessageDialog(buttonPanel, "No help available.");
+                }
             }
         });
 
