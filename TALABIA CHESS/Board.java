@@ -113,8 +113,6 @@ public class Board { //Design Pattern: Singleton. Because only one board is used
                     objectAtCoords.setX(j);
                     objectAtCoords.setY(i);
                 }
-
-                //TO DO: set colours for each piece (idk why its not correct)
             }
         }
     }
@@ -146,13 +144,13 @@ public class Board { //Design Pattern: Singleton. Because only one board is used
                 Piece objectAtCoords = map.get(i).get(j);
 
                 if (objectAtCoords != null) {
-                    switch (objectAtCoords.getClass().getSimpleName()) {
-                        case "TimePiece":
+                    switch (objectAtCoords.getPiece()) {
+                        case "time":
                             pieceColour = objectAtCoords.getColour();
                             this.setPiece(j, i, new PlusPiece());
                             break;
 
-                        case "PlusPiece":
+                        case "plus":
                             pieceColour = objectAtCoords.getColour();
                             this.setPiece(j, i, new TimePiece());
                             break;
@@ -161,7 +159,7 @@ public class Board { //Design Pattern: Singleton. Because only one board is used
                             break;
                     }
 
-                    objectAtCoords.setColour(pieceColour);
+                    map.get(i).get(j).setColour(pieceColour);
                 }
             }
         }
