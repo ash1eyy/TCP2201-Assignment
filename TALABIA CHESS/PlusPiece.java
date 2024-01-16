@@ -31,10 +31,10 @@ public class PlusPiece extends Piece {
         //if a piece is detected, move is invalid
         switch (this.getDir()) {
             case "left":
-                for (int i = 1; i < Math.abs(newX - this.getX()) + 1; i++) { //we use math abs so there is no negative numbers
+                for (int i = 1; i < Math.abs(newX - this.getX()) + 1; i++) { //newX+= is go right, newX-= is go left
                     pieceInFront = board.getPiece(this.getX() - i, this.getY());
 
-                    if (pieceInFront != null) {
+                    if (pieceInFront != null) { //this is to check if there is a piece in front
                         return false;
                     }
                     continue;
@@ -53,7 +53,7 @@ public class PlusPiece extends Piece {
                 break;
 
             case "up":
-                for (int i = 1; i < Math.abs(newY - this.getY()) + 1; i++) {
+                for (int i = 1; i < Math.abs(newY - this.getY()) + 1; i++) {//newY+= is go down, newY-=
                     pieceInFront = board.getPiece(this.getX(), this.getY() - i);
 
                     if (pieceInFront != null) {
@@ -87,12 +87,12 @@ public class PlusPiece extends Piece {
     }
 
     @Override
-    public String toString() {
-        return "+";
+    public String getPiece() {
+        return "plus";
     }
 
     @Override
-    public String getPiece(){
-        return "plus";
+    public String toString() {
+        return "+";
     }
 }
