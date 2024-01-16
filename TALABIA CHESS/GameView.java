@@ -1,89 +1,124 @@
-import javax.swing.*;//imports 
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
+import java.awt.event.ActionEvent;
+import javax.swing.*;
 
-public class GameView extends JFrame { // zaf and thash doing this, hello
-
-    private GameController controller;
+public class GameView extends JFrame { // by Javier Austin and Ashley ^.^
+    private static int column = 7;
+    private static int row = 6;
+    private static GameController controller = new GameController();
+    private JPanel boardPanel = new JPanel(new GridLayout(row, column)); //turned into a variable for easy access
 
     public GameView() {
         super("Talabia Chess");
-        JPanel panel = new JPanel();
-
-        // default size for board
-        setSize(800, 800);
-        
         setLayout(new BorderLayout());
-        
+        setPreferredSize(new Dimension(500, 400)); //prefferd size
 
-        // make the window resizeable
-        setResizable(true);
+        //adds button to the arraylist and to the board panel
+        for (int i = 0; i < row * column; i++) {
+            JButton button = new JButton() {
+                {
+                    setPreferredSize(new Dimension(50, 50));
+                    setOpaque(true);
+                    setBorderPainted(true);
+                }
+            };
+            boardPanel.add(button);
+        }
+        updatePieces(boardPanel);
+        add(boardPanel, BorderLayout.CENTER);
 
-        addGameBoard(); // adds the gameboard into GUI
-
-        addControlPanel();// adds the Control Into GUI
-        
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        setVisible(true);// make frame visible
+        JPanel buttonPanel = buttonPanel();
+        add(buttonPanel, BorderLayout.WEST);
     }
 
-    // add components
-    public void addGameBoard() {
+    private JPanel buttonPanel(){
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.WHITE);
+        buttonPanel.setPreferredSize(new Dimension(100,400));
 
-        JPanel boardPanel = new JPanel();
-        boardPanel.add(new JLabel("Game Board Here")); // this replace with an actual game board
-        add(boardPanel, BorderLayout.CENTER); // add to the center of the frame
-
-        GridLayout grid = new GridLayout(controller.getGameModel().getX(), controller.getGameModel().getY());
-        boardPanel.setLayout(grid);
-
-        ArrayList<ArrayList<Piece>> map = controller.getGameModel().getMap();
-        for (int i = 0; i < controller.getGameModel().getY(); i++) {
-            for (int j = 0; j < controller.getGameModel().getX(); j++) {
-
-                Piece piece = map.get(i).get(j);
-                JButton newButton = new JButton();
-
-            }
-        } 
-    }
-
-    public void addControlPanel() {
-        JPanel controlPanel = new JPanel();
-        add(controlPanel);
-
-        // the start button for the game
         JButton startButton = new JButton("Start");
-        controlPanel.add(startButton);
+        buttonPanel.add(startButton);
         startButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // TODO
+                GameController.newGame();
             }
         });
 
-        // the save button for the game
         JButton saveButton = new JButton("Save");
-        controlPanel.add(saveButton);
+        buttonPanel.add(saveButton);
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // prompts the user to input a filename
+                //GameController.save(getWarningString(), ABORT, getName());
             }
         });
 
-        // the exit button for the game
-        JButton exitButton = new JButton("Exit");
-        controlPanel.add(exitButton);
-        exitButton.addActionListener(new ActionListener() {
+        JButton loadButton = new JButton("Load");
+        buttonPanel.add(loadButton);
+        loadButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {               
-                JOptionPane.showMessageDialog(exitButton, "Exiting...");
-                Game.exit();
+            public void actionPerformed(ActionEvent e) {
+                //GameController.load(null, getWarningString(), ABORT, getName());
+            }
+            
+        });
+
+        JButton helpButton = new JButton("Help");
+        buttonPanel.add(helpButton);
+        helpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String helpMessage = GameController.helpCommands();
+
+                // Check if the helpMessage is not null before showing the dialog
+                if (helpMessage != null) {
+                    JOptionPane.showMessageDialog(buttonPanel, helpMessage);
+                } else {
+                    JOptionPane.showMessageDialog(buttonPanel, "No help available.");
+                }
             }
         });
+
+        JButton exitButton = new JButton("Exit");
+        buttonPanel.add(exitButton);
+        exitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GameController.exit();
+            }
+        });
+
+        return buttonPanel;
+    }
+
+    //add the pieces in the board in its respective cell
+    //call this function every time a piece is moved!!!!
+    
+    public void updatePieces(JPanel boardPanel) {
+        Queue<String> pieceNames = new LinkedList<String>();
+        Component[] components = boardPanel.getComponents();//gets all components as component object
+
+        for (int i = 0; i < controller.getBoard().getY(); i++) {
+            for (Piece j : controller.getBoard().getMap().get(i)) {
+                if (j != null)
+                    pieceNames.add(j.getColour() + j.getPiece());
+                else
+                    pieceNames.add("empty");
+            } 
+        } //this for loop is to access the pieces in the board in the model (ok keep this)
+        
+        for (Component component : components) {
+            JButton button = (JButton) component; //changing it into a JButton object (polymorphism)
+
+            if (pieceNames.peek() != "empty")//when not empty 
+                button.setIcon(new ImageIcon("Images/" + pieceNames.poll() + ".png")); //set button to corresponding image
+            else {
+                button.setIcon(null);
+                pieceNames.poll();
+            }
+        }
     }
 }
