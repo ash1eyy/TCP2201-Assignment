@@ -42,12 +42,12 @@ public class SunPiece extends Piece {
     }
 
     @Override
-    public String toString() {
-        return "S";
-    }
-
-     @Override
     public String getPiece() {
         return "sun";
+    }
+
+    @Override
+    public String toString() {
+        return "S";
     }
 }
