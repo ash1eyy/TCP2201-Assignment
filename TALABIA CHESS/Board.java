@@ -112,6 +112,11 @@ public class Board { //Design Pattern: Singleton. Because only one board is used
                 if (objectAtCoords != null) {
                     objectAtCoords.setX(j);
                     objectAtCoords.setY(i);
+
+                    if (objectAtCoords.getDir() == "up")
+                        objectAtCoords.setDir("down");
+                    else
+                        objectAtCoords.setDir("up");
                 }
             }
         }
