@@ -24,6 +24,8 @@ public class GameView extends JFrame { // by Javier Austin and Ashley ^.^
                     setBorderPainted(true);
                 }
             };
+            
+            button.addActionListener(new ButtonListener());
             boardPanel.add(button);
         }
         updatePieces(boardPanel);
@@ -48,16 +50,15 @@ public class GameView extends JFrame { // by Javier Austin and Ashley ^.^
         });
 
         JButton saveButton = new JButton("Save");
-        buttonPanel.add(saveButton);
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //GameController.save(getWarningString(), ABORT, getName());
             }
         });
+        buttonPanel.add(saveButton);
 
         JButton loadButton = new JButton("Load");
-        buttonPanel.add(loadButton);
         loadButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -65,9 +66,9 @@ public class GameView extends JFrame { // by Javier Austin and Ashley ^.^
             }
             
         });
+        buttonPanel.add(loadButton);
 
         JButton helpButton = new JButton("Help");
-        buttonPanel.add(helpButton);
         helpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -81,15 +82,16 @@ public class GameView extends JFrame { // by Javier Austin and Ashley ^.^
                 }
             }
         });
+        buttonPanel.add(helpButton);
 
         JButton exitButton = new JButton("Exit");
-        buttonPanel.add(exitButton);
         exitButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 GameController.exit();
             }
         });
+        buttonPanel.add(exitButton);
 
         return buttonPanel;
     }
