@@ -1,20 +1,22 @@
 import java.io.*;
 import java.util.*;
 
-public class GameController {
-    private static Board board = Board.createInstance();
-    private GameView view;
+import javax.swing.JOptionPane;
 
-    public GameController() {
-        board.init();
-    }
+public class GameController {
+    private static int turn = 0;
+    private static String userColour = "yellow";
+    private static Board board = Board.createInstance();
+    private static GameView view;
+
+    public GameController() {}
 
     public GameController(Board board, GameView view) {
         this.board = board;
         this.view = view;
     }
 
-    public Board getBoard() {
+    public static Board getBoard() {
         return board;
     }
 
@@ -33,41 +35,21 @@ public class GameController {
     public static void newGame() {
         board = Board.createInstance();
 
-        int turn = 1;
-        String userColour = "yellow";
-
         playGame(turn, userColour);
     }
     
-    public static void save(String filename, int turn, String userColour) {
-        boolean fileExists = false;
+    //done by ashley
+    //WORKING!!!
+    public static void save(String filename) {
+        int overwrite = 0; //0 to not overwrite, 1 to overwrite
         // open new file with user input filename
-        try {
-            File myFile = new File(filename + ".txt");
-            if (myFile.createNewFile()) {
-                System.out.println("File created: " + myFile.getName());
-            } else {
-                fileExists = true;
-                throw new IOException("File already exists.");
+        File myFile = new File(filename + ".txt");
+        if (myFile.exists()) {
+            overwrite = (JOptionPane.showConfirmDialog(view.getBoardPanel(), "Overwrite file?", "Save", JOptionPane.YES_NO_OPTION));
+
+            if (overwrite == JOptionPane.NO_OPTION) {
+                return;
             }
-
-            // CHANGE to remove all console output and input
-            // if (fileExists) {
-            // System.out.println("Overwrite the file? [Y/N]");
-            // String overwriteConfirm = input.next();
-            // input.nextLine();
-            // overwriteConfirm = overwriteConfirm.toUpperCase();
-
-            // if (overwriteConfirm.equals("N"))
-            // break;
-            // else if (!overwriteConfirm.equals("Y")) {
-            // System.out.println("Not a valid input.");
-            // break;
-            // }
-            // }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
         }
 
         // save data into the file
@@ -99,13 +81,14 @@ public class GameController {
             // close the file
             myWriter.close();
         } catch (IOException e) {
-            System.out.println("An error occurred.");
+            JOptionPane.showMessageDialog(view.getBoardPanel(), "File could not be saved.");
             e.printStackTrace();
         }
     }
 
     // done by ashley >_<
-    public static void load(String filename, int turn, String userColour) {
+    // NEED TO FIX
+    public static void load(String filename) {
         try {
             File readFile = new File(filename + ".txt");
             Scanner fileReader = new Scanner(readFile);
@@ -130,6 +113,7 @@ public class GameController {
 
             fileReader.close();
         } catch (FileNotFoundException e) {
+            JOptionPane.showMessageDialog(view.getBoardPanel(), "File not found.");
             // System.out.println("\nFile does not exist.");
             e.printStackTrace();
         }
@@ -137,21 +121,33 @@ public class GameController {
 
     public static void playGame(int turn, String userColour) {
         while (true) {
-            if (turn > 1) {
+            if (turn > 0) {
                 switch (turn % 2) {
                     case 0: // yellow at the bottom of the screen
-                        userColour = "blue";
+                        userColour = "yellow";
                         break;
                     case 1: // blue at the bottom of the screen
-                        userColour = "yellow";
+                        userColour = "blue";
                         break;
                 }
             }
 
+            view.updatePieces();
+
             // TEMPORARY CODE for console display
-            System.out.println("Turn: " + turn);
-            board.display();
-            if (console(board, turn, userColour)) {
+            //System.out.println("Turn: " + (turn + 1));
+            //board.display();
+            
+            // DEBUGGING PURPOSE ONLY
+            // for (int i = 0; i < 6; i++) {
+            //     for (Piece j : board.getMap().get(i)) {
+            //         System.out.print(j + ", ");
+            //         if (j != null)
+            //             System.out.println(j.getColour());
+            //     }
+            // }
+
+            //if (console(board, turn, userColour)) {
                 // only executes following code if valid move was performed
                 turn++;
 
@@ -162,7 +158,7 @@ public class GameController {
                 if (turn % 2 == 0) {
                     board.switchTimeAndPlus();
                 }
-            }
+            //}
         }
     }
 
@@ -207,13 +203,13 @@ public class GameController {
             case "save":
                 System.out.print("Enter filename to save to: ");
                 filename = input.nextLine();
-                save(filename, turn, userColour);
+                save(filename);
                 break;
 
             case "load":
                 System.out.print("Enter filename to load from: ");
                 filename = input.nextLine();
-                load(filename, turn, userColour);
+                load(filename);
 
             case "quit":
                 exit();
