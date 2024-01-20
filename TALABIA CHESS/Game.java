@@ -10,6 +10,7 @@ public class Game { // Design Pattern: Facade. Front-facing interface masking mo
         JFrame f = new GameView();
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.pack();
+        f.setLocationRelativeTo(null);
         f.setVisible(true);
         // do game things
     }
