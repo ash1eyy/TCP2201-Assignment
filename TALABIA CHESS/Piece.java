@@ -1,3 +1,5 @@
+import java.util.*;
+
 public abstract class Piece{ 
     //data field
     private int pieceX;
@@ -46,27 +48,27 @@ public abstract class Piece{
         this.direction = direction;
     }
 
-    public abstract String getPiece();
+    public abstract String getPieceName();
 
     //by ashley :-)
-    public boolean move(Board board, int newX, int newY, String userColour) {
-        if (isValidMove(board, newX, newY) && userColour == board.getPiece(getX(), getY()).getColour()) { //valid move method that will be used for each piece
-            board.setPiece(getX(), getY(), null);
-            board.setPiece(newX, newY, this);
-            System.out.println("\nSuccessfully moved piece.\n"); //message displayed
-            return true;
-        }
-        else {
-            System.out.println("\nNot a valid move.\n"); //message displayed
-            return false;
-        }
-    };
+    // public boolean move(Board board, int newX, int newY, String userColour) {
+    //     if (isValidMove(board, newX, newY) && userColour == board.getPiece(getX(), getY()).getColour()) { //valid move method that will be used for each piece
+    //         board.setPiece(getX(), getY(), null);
+    //         board.setPiece(newX, newY, this);
+    //         System.out.println("\nSuccessfully moved piece.\n"); //message displayed
+    //         return true;
+    //     }
+    //     else {
+    //         System.out.println("\nNot a valid move.\n"); //message displayed
+    //         return false;
+    //     }
+    // };
 
-    public abstract boolean isValidMove(Board board, int newX, int newY);
+    public abstract ArrayList<ArrayList<Integer>> getValidMoves(Board board);
+
 
     // this is a capture method that declares targetPiece variable from the pieces on the board
-
-    public void capture(Board board, int pieceX, int pieceY) { //zafran did this 
+    public void capture(Board board, int pieceX, int pieceY) { //by zafran 
         Piece targetPiece = board.getPiece(pieceX, pieceY);   
         
         if (this.pieceColour != targetPiece.getColour()) { //can capture
