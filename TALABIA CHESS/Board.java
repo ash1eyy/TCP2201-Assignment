@@ -4,8 +4,8 @@ import java.util.Collections;
 public class Board { //Design Pattern: Singleton. Because only one board is used throughout the game.
     private static Board singleInstance = null;
     //2-DIMENSIONAL ARRAYLIST FOR THE BOARD
-    private int dimX = 7;
-    private int dimY = 6;
+    private final int dimX = 7;
+    private final int dimY = 6;
     private ArrayList<ArrayList<Piece>> map;
 
     private Board() {}
@@ -149,22 +149,22 @@ public class Board { //Design Pattern: Singleton. Because only one board is used
                 Piece objectAtCoords = map.get(i).get(j);
 
                 if (objectAtCoords != null) {
-                    switch (objectAtCoords.getPiece()) {
+                    switch (objectAtCoords.getPieceName()) {
                         case "time":
                             pieceColour = objectAtCoords.getColour();
                             this.setPiece(j, i, new PlusPiece());
+                            map.get(i).get(j).setColour(pieceColour);
                             break;
 
                         case "plus":
                             pieceColour = objectAtCoords.getColour();
                             this.setPiece(j, i, new TimePiece());
+                            map.get(i).get(j).setColour(pieceColour);
                             break;
 
                         default:
                             break;
                     }
-
-                    map.get(i).get(j).setColour(pieceColour);
                 }
             }
         }
