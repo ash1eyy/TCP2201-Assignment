@@ -1,17 +1,21 @@
 import javax.swing.*;
 
-public class Game { // Design Pattern: Facade. Front-facing interface masking more complex code.
+// Design Pattern: Facade. Front-facing interface masking more complex code.
+
+public class Game { 
     public static void main(String[] args) {
         GameController controller = new GameController();
+        // Board board = Board.createInstance();
+        // board.init();
 
         GameView view = new GameView();
+        view.setGameController(controller);
         controller.setGameView(view);
 
-        JFrame f = new GameView();
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.pack();
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
+        view.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        view.pack();
+        view.setLocationRelativeTo(null);
+        view.setVisible(true);
         // do game things
     }
 }
