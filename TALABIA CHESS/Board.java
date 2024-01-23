@@ -1,9 +1,20 @@
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Board { //Design Pattern: Singleton. Because only one board is used throughout the game.
+
+
+//The board is made out of 2 Dimensional Arrayslists
+
+//and it uses a single instance only 
+
+//Design Pattern: Singleton. Because only one board is used throughout the game.
+
+
+
+
+
+public class Board { 
     private static Board singleInstance = null;
-    //2-DIMENSIONAL ARRAYLIST FOR THE BOARD
     private final int dimX = 7;
     private final int dimY = 6;
     private ArrayList<ArrayList<Piece>> map;
@@ -18,7 +29,7 @@ public class Board { //Design Pattern: Singleton. Because only one board is used
         return dimY;
     }
 
-    public ArrayList<ArrayList<Piece>> getMap() {
+    public ArrayList<ArrayList<Piece>> getMap() { // 2d array of the board
         return map;
     }
 
@@ -78,12 +89,21 @@ public class Board { //Design Pattern: Singleton. Because only one board is used
         }
     }
 
-    public static synchronized Board createInstance() {
+//A single instance of the board
+
+    public static synchronized Board createInstance() { 
         if (singleInstance == null) 
             singleInstance = new Board();
         
         return singleInstance;
     }
+
+
+
+//This is the board made out of the 2d Arraylists on display
+//The main board we will be playing on using the console
+
+
 
     public void display() {
         //TEMPORARY CONSOLE DISPLAY. NEED TO REPLACE
@@ -100,6 +120,14 @@ public class Board { //Design Pattern: Singleton. Because only one board is used
             System.out.println("|\n+-+-+-+-+-+-+-+");
         }
     }
+
+
+
+//This method will flip the board 
+//It reiterates through the array with a loop 
+//The method will check if the object at the coordinates are null 
+//If not null the objects will be set with i and j values 
+
 
     //flip the board
     public void flipBoard() {
@@ -122,43 +150,92 @@ public class Board { //Design Pattern: Singleton. Because only one board is used
         }
     }
 
-    //gets the piece 
+//Method to get piece 
+
     public Piece getPiece(int x, int y) {
 		return map.get(y).get(x);
     }
 
-    //this set piece on map
+//Method that sets piece
+// 
+//paramerters used integer x, integer y, Piece piece
+//
     public void setPiece(int x, int y, Piece piece) {
         map.get(y).set(x, piece);
     }
     //after board initializes
     //set piece at their new coords after being moved
 
-    public boolean isEmpty(int x, int y) {
+
+//Method if there is no piece at the coordinate
+    public boolean isEmpty(int x, int y) { 
 		if (map.get(y).get(x) == null)
             return true;
         else
             return false;
     }
 
-    public void switchTimeAndPlus() {
-        String pieceColour = "";
+    
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    //returns true if a move was successfully made, otherwise returns false
+    // public boolean move(Piece piece, int newX, int newY) { //the move method
+
+/*         int oldX = piece.getX();
+        int oldY = piece.getY();
+        
+        //iterates through all the valid moves of the given piece
+        for (ArrayList<Integer> validMove : piece.getValidMoves(this)) {
+            //if the new coords are one of the valid moves
+            if (validMove.get(0) == newX &&
+                validMove.get(1) == newY) {
+                //if the piece at the destination is the sun, win the game
+                // if (getPiece(newX, newY) != null && 
+                //     getPiece(newX, newY).getPieceName() == "sun") {
+                        
+                //     //win game :)
+                    
+                // }
+
+                setPiece(newX, newY, piece);
+                setPiece(oldX, oldY, null);
+
+                return true;
+            }
+        }
+        return false;
+    } */
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+//Method that switches time and plus 
+
+    public void switchTimeAndPlus() { 
+        String pieceColour = ""; 
 
         for (int i = 0; i < dimY; i++) {
             for (int j = 0; j < dimX; j++) {
+
+                //Gets the coordinates of the following piece       
+
                 Piece objectAtCoords = map.get(i).get(j);
 
-                if (objectAtCoords != null) {
-                    switch (objectAtCoords.getPieceName()) {
+                if (objectAtCoords != null) { //If not null switch case occurs
+                    switch (objectAtCoords.getPieceName()) { 
                         case "time":
                             pieceColour = objectAtCoords.getColour();
-                            this.setPiece(j, i, new PlusPiece());
-                            map.get(i).get(j).setColour(pieceColour);
+                            setPiece(j, i, new PlusPiece()); //sets the time piece into a plus piece
+                            getPiece(j, i).setX(j);
+                            getPiece(j, i).setY(i);
+                            map.get(i).get(j).setColour(pieceColour); //sets colour of piece from the colour it was before
                             break;
 
                         case "plus":
                             pieceColour = objectAtCoords.getColour();
-                            this.setPiece(j, i, new TimePiece());
+                            setPiece(j, i, new TimePiece()); //sets the plus piece into a time piece
+                            getPiece(j, i).setX(j);
+                            getPiece(j, i).setY(i);
                             map.get(i).get(j).setColour(pieceColour);
                             break;
 
