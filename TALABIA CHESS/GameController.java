@@ -4,48 +4,90 @@ import java.util.*;
 import javax.swing.JOptionPane;
 
 public class GameController {
-    private static int turn = 0;
-    private static String userColour = "yellow";
-    private static Board board = Board.createInstance();
-    private static GameView view;
+    private int turn = 0;
+    private String userColour = "yellow";
+    private Board board = Board.createInstance();
+    private GameModel model = new GameModel();
+    private GameView view = new GameView();
 
-    public GameController() {}
+    public GameController() {
+        board.init();
+    }
 
     public GameController(Board board, GameView view) {
         this.board = board;
         this.view = view;
     }
 
-    public static Board getBoard() {
-        return board;
+    public int getTurn() {
+        return model.getTurn();
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
+    public String getPlayer() {
+        return model.getPlayer();
+    }
+
+    public Board getBoard() {
+        return model.getBoard();
+    }
+
+    public GameModel getModel() {
+        return model;
     }
 
     public GameView getGameView() {
         return view;
     }
 
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
     public void setGameView(GameView view) {
         this.view = view;
     }
 
-    public static void newGame() {
-        board = Board.createInstance();
+    // public void newGame() {
+    // board = Board.createInstance();
+    // board.init();
 
-        playGame(turn, userColour);
+    // view.updatePieces();
+
+    // playGame(turn, userColour);
+    // }
+
+    public void changeTurns() {// method that changes turns, the method uses a modulus to determine each
+                               // players turn
+        // turn++;
+
+        // if (turn > 0) {
+        //     switch (turn % 2) {
+        //         case 0: // yellow at the bottom of the screen
+        //             userColour = "yellow";
+        //             break;
+        //         case 1: // blue at the bottom of the screen
+        //             userColour = "blue";
+        //             break;
+        //     }
+        // }
+
+        // board.flipBoard();
+
+        // if (turn % 2 == 0) {
+        //     board.switchTimeAndPlus();
+        // }
+        model.changeTurns();
     }
-    
-    //done by ashley
-    //WORKING!!!
-    public static void save(String filename) {
-        int overwrite = 0; //0 to not overwrite, 1 to overwrite
+
+    // done by ashley
+    // WORKING!!!
+    public void save(String filename) {
+        int overwrite = 0; // 0 to not overwrite, 1 to overwrite
         // open new file with user input filename
         File myFile = new File(filename + ".txt");
         if (myFile.exists()) {
-            overwrite = (JOptionPane.showConfirmDialog(view.getBoardPanel(), "Overwrite file?", "Save", JOptionPane.YES_NO_OPTION));
+            overwrite = (JOptionPane.showConfirmDialog(view.getBoardPanel(), "Overwrite file?", "Save",
+                    JOptionPane.YES_NO_OPTION));
 
             if (overwrite == JOptionPane.NO_OPTION) {
                 return;
@@ -71,9 +113,9 @@ public class GameController {
                         myWriter.write(" \n");
                     else {
                         myWriter.write(piece.toString() + "\n" + piece.getColour() + "\n" + piece.getDir() + "\n");
-                        System.out.println(piece.toString());
-                        System.out.println(piece.getColour());
-                        System.out.println(piece.getDir());
+                        // System.out.println(piece.toString());
+                        // System.out.println(piece.getColour());
+                        // System.out.println(piece.getDir());
                     }
                 }
                 myWriter.write("\n"); // new line for every row in the board
@@ -86,145 +128,194 @@ public class GameController {
         }
     }
 
+    public void load(String filename) {
+    try {
+        File readFile = new File(filename + ".txt");
+        Scanner fileReader = new Scanner(readFile);
+
+        // load turn number
+        if (fileReader.hasNextLine()) {
+            turn = Integer.parseInt(fileReader.nextLine().trim());
+        } else {
+            throw new IOException("File format incorrect - Missing turn number.");
+        }
+
+        // load user colour (whose turn it is)
+        if (fileReader.hasNextLine()) {
+            userColour = fileReader.nextLine().trim();
+        } else {
+            throw new IOException("File format incorrect - Missing user color.");
+        }
+
+        for (int i = 0; i < board.getY(); i++) {
+            for (int j = 0; j < board.getX(); j++) {
+                String pieceSymbol = fileReader.hasNextLine() ? fileReader.nextLine().trim() : null;
+
+                // If pieceSymbol is a space or empty, it means there is no piece at this position.
+                if (pieceSymbol == null || pieceSymbol.isEmpty() || pieceSymbol.equals(" ")) {
+                    // Handle the absence of a piece here, perhaps set to null or continue
+                    continue;
+                } else {
+                    // We have a valid piece symbol, proceed to read color and direction.
+                    String pieceColour = fileReader.hasNextLine() ? fileReader.nextLine().trim() : null;
+                    String pieceDir = fileReader.hasNextLine() ? fileReader.nextLine().trim() : null;
+
+                    if (pieceColour == null || pieceDir == null) {
+                        throw new IOException("File format incorrect - Missing piece color or direction.");
+                    }
+
+                    // Logic to recreate the piece on the board
+                    // Example:
+                    // Piece piece = new Piece(pieceSymbol, pieceColour, pieceDir);
+                    // board.setPiece(i, j, piece);
+                }
+            }
+        }
+
+        fileReader.close();
+    } catch (FileNotFoundException e) {
+        JOptionPane.showMessageDialog(view.getBoardPanel(), "File not found.");
+        e.printStackTrace();
+    } catch (IOException e) {
+        JOptionPane.showMessageDialog(view.getBoardPanel(), e.getMessage());
+        e.printStackTrace();
+    }
+}
+
+
     // done by ashley >_<
     // NEED TO FIX
-    public static void load(String filename) {
-        try {
-            File readFile = new File(filename + ".txt");
-            Scanner fileReader = new Scanner(readFile);
+    // public void load(String filename) {
+    // try {
+    // File readFile = new File(filename + ".txt");
+    // Scanner fileReader = new Scanner(readFile);
 
-            // load turn number
-            turn = Integer.valueOf(fileReader.nextLine());
+    // // load turn number
+    // turn = Integer.valueOf(fileReader.nextLine());
 
-            // load user colour (whose turn it is)
-            userColour = fileReader.nextLine();
+    // // load user colour (whose turn it is)
+    // userColour = fileReader.nextLine();
 
-            for (int i = 0; i < board.getY(); i++) {
-                for (int j = 0; j < board.getX(); j++) {
-                    String pieceSymbol = fileReader.nextLine();
-                    String pieceColour = fileReader.nextLine();
-                    String pieceDir = fileReader.nextLine();
+    // for (int i = 0; i < board.getY(); i++) {
+    // for (int j = 0; j < board.getX(); j++) {
+    // String pieceSymbol = fileReader.nextLine();
+    // String pieceColour = fileReader.nextLine();
+    // String pieceDir = fileReader.nextLine();
 
-                    // board.setPiece(i, j, piece.getPiece());
-                    // board.getPiece(i, j).setColour(pieceColour);
-                    // board.getPiece(i, j).setDir(pieceDir);
-                }
-            }
+    // // board.setPiece(i, j, piece.getPiece());
+    // // board.getPiece(i, j).setColour(pieceColour);
+    // // board.getPiece(i, j).setDir(pieceDir);
 
-            fileReader.close();
-        } catch (FileNotFoundException e) {
-            JOptionPane.showMessageDialog(view.getBoardPanel(), "File not found.");
-            // System.out.println("\nFile does not exist.");
-            e.printStackTrace();
-        }
-    }
+    // if(!pieceSymbol){ //to make sure that the line is not empty before read
 
-    public static void playGame(int turn, String userColour) {
-        while (true) {
-            if (turn > 0) {
-                switch (turn % 2) {
-                    case 0: // yellow at the bottom of the screen
-                        userColour = "yellow";
-                        break;
-                    case 1: // blue at the bottom of the screen
-                        userColour = "blue";
-                        break;
-                }
-            }
+    // }
+    // }
+    // }
+    // System.out.println("Succesfully Loaded Game File!!!!!!");
 
-            view.updatePieces();
+    // fileReader.close();
+    // } catch (FileNotFoundException e) {
+    // JOptionPane.showMessageDialog(view.getBoardPanel(), "File not found.");
+    // // System.out.println("\nFile does not exist.");
+    // e.printStackTrace();
+    // }
+    // }
 
-            // TEMPORARY CODE for console display
-            //System.out.println("Turn: " + (turn + 1));
-            //board.display();
-            
-            // DEBUGGING PURPOSE ONLY
-            // for (int i = 0; i < 6; i++) {
-            //     for (Piece j : board.getMap().get(i)) {
-            //         System.out.print(j + ", ");
-            //         if (j != null)
-            //             System.out.println(j.getColour());
-            //     }
-            // }
+    // public void playGame(int turn, String userColour) {
+    // while (true) {
+    // System.out.println(turn + ", " + userColour);
+    // if (turn > 0) {
+    // switch (turn % 2) {
+    // case 0: // yellow at the bottom of the screen
+    // userColour = "yellow";
+    // break;
+    // case 1: // blue at the bottom of the screen
+    // userColour = "blue";
+    // break;
+    // }
+    // }
 
-            //if (console(board, turn, userColour)) {
-                // only executes following code if valid move was performed
-                turn++;
+    // view.updatePieces();
 
-                // flip board every turn
-                board.flipBoard();
+    // //if (console(board, turn, userColour)) {
+    // // only executes following code if valid move was performed
+    // System.out.println(board.getMap());
+    // turn++;
 
-                // change time <-> plus every 2 turns
-                if (turn % 2 == 0) {
-                    board.switchTimeAndPlus();
-                }
-            //}
-        }
-    }
+    // // flip board every turn
+    // board.flipBoard();
 
-    //by ashley :>
-    public static boolean console(Board board, int turn, String userColour) {
-        // commands:
-        // 1. piece - enter x & y coordinates to select piece,
-        // then another set of x & y coordinates to move it
-        // 2. save
-        // 3. load
-        // 4. quit
-        System.out.print("\n> ");
+    // // change time <-> plus every 2 turns
+    // if (turn % 2 == 0) {
+    // board.switchTimeAndPlus();
+    // }
+    // //}
+    // }
+    // }
 
-        Scanner input = new Scanner(System.in);
+    // by ashley :>
+    // public static boolean console(Board board, int turn, String userColour) {
+    // // commands:
+    // // 1. piece - enter x & y coordinates to select piece,
+    // // then another set of x & y coordinates to move it
+    // // 2. save
+    // // 3. load
+    // // 4. quit
+    // System.out.print("\n> ");
 
-        String filename = "";
+    // Scanner input = new Scanner(System.in);
 
-        switch (input.nextLine()) {
-            case "piece":
-                System.out.print("Enter x coordinate: ");
-                int pieceX = input.nextInt();
-                System.out.print("Enter y coordinate: ");
-                int pieceY = input.nextInt();
+    // String filename = "";
 
-                Piece pieceToMove = board.getPiece(pieceX, pieceY);
-                System.out.println(pieceToMove + ", " + pieceToMove.getColour());
+    // switch (input.nextLine()) {
+    // case "piece":
+    // System.out.print("Enter x coordinate: ");
+    // int pieceX = input.nextInt();
+    // System.out.print("Enter y coordinate: ");
+    // int pieceY = input.nextInt();
 
-                System.out.print("\nEnter x coordinate of destination: ");
-                int newX = input.nextInt();
-                System.out.print("Enter y coordinate of destination: ");
-                int newY = input.nextInt();
+    // Piece pieceToMove = board.getPiece(pieceX, pieceY);
+    // System.out.println(pieceToMove + ", " + pieceToMove.getColour());
 
-                if (pieceToMove.move(board, newX, newY, userColour)) {
-                    pieceToMove.setX(newX);
-                    pieceToMove.setY(newY);
+    // System.out.print("\nEnter x coordinate of destination: ");
+    // int newX = input.nextInt();
+    // System.out.print("Enter y coordinate of destination: ");
+    // int newY = input.nextInt();
 
-                    return true;
-                }
+    // if (pieceToMove.move(board, newX, newY, userColour)) {
+    // pieceToMove.setX(newX);
+    // pieceToMove.setY(newY);
 
-                return false;
+    // return true;
+    // }
 
-            case "save":
-                System.out.print("Enter filename to save to: ");
-                filename = input.nextLine();
-                save(filename);
-                break;
+    // return false;
 
-            case "load":
-                System.out.print("Enter filename to load from: ");
-                filename = input.nextLine();
-                load(filename);
+    // case "save":
+    // System.out.print("Enter filename to save to: ");
+    // filename = input.nextLine();
+    // save(filename);
+    // break;
 
-            case "quit":
-                exit();
-        }
+    // case "load":
+    // System.out.print("Enter filename to load from: ");
+    // filename = input.nextLine();
+    // load(filename);
 
-        return false;
-    }
+    // case "quit":
+    // exit();
+    // }
+
+    // return false;
+    // }
 
     // Exit the game. <-- Javier Austin ^.^
-    public static void exit() {
+    public void exit() {
         System.out.println("Exiting Game...Goodbye!");
         System.exit(0);
     }
 
-    public static String helpCommands() {
+    public String helpCommands() { // help commands. rule of each piece
         StringBuilder helpMessage = new StringBuilder();
         helpMessage.append("----------How to play Talabia Chess?----------\n");
         helpMessage.append("The Point Piece can only move forward by 1 or 2 steps.\n");
